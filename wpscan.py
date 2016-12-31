@@ -10,21 +10,18 @@ import os
 config = configparser.ConfigParser()
 config.read(os.path.join(os.path.dirname(__file__), 'settings.ini'))
 
-wp_sites = ['http://www.example.com']
-#wp_sites = config.items('wp_sites_to_scan')
-#false_positive_strings = config.items('main', 'false_posotive_strings')
-false_positive_strings = ['XML-RPC', 'GHOST vulnerability']
-
+wp_sites = config.items('wp_sites_to_scan')
+false_positive_strings = config.items('fp')
 log_file = r'./wpwatcher.log'
 
 
 def main():
     print "[INFO] Starting scans on configured sites"
-    for sites in wp_sites:
+    for key, sites in wp_sites:
 
         try:
             print "[INFO] Scanning '%s'" % sites
-            result = Popen(['ruby', '/usr/bin/wpscan/wpscan.rb', '--disable-tls-checks', '--url', sites], stdout=PIPE, shell=False)
+            result = Popen(['wpscan', '--url', sites], stdout=PIPE, shell=False)
             output = result.stdout.read()
             print output
         except CalledProcessError as exc:
@@ -91,7 +88,7 @@ def parse_results(output):
 
 def is_false_positive(string):
     # False Positive Detection
-    for fp_string in false_positive_strings:
+    for key, fp_string in false_positive_strings:
         if fp_string in string:
             # print fp_string, string
             return 1
