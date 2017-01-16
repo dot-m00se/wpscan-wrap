@@ -8,4 +8,4 @@ It is assumed that wpscan installed on the system and is in your path.
 If it is not you should install wpscan and change the path used in the subrorcess section of the script. 
 
 It would look somthing like this: 
-result = Popen(['ruby''/path/to/wpscan.rb', '--url', sites], stdout=PIPE, shell=False)
+<i>result = Popen(['ruby', '/path/to/wpscan.rb', '--url', sites], stdout=PIPE, shell=False)<i>
